@@ -1,0 +1,40 @@
+<div class="todo" [class.completed]="todo.completed">
+  <label class="todo__status-label">
+    <input
+      type="checkbox"
+      class="todo__status"
+      [checked]="todo.completed"
+      (change)="toggle.emit()"
+    />
+  </label>
+
+  @if (editing()) {
+    <form (ngSubmit)="save()">
+      <input
+        #titleField
+        type="text"
+        name="title"
+        class="todo__title-field"
+        placeholder="Empty todo will be deleted"
+        [(ngModel)]="title"
+        (keyup.escape)="editing.set(false)"
+        (blur)="save()"
+      />
+    </form>
+  } @else {
+    <ng-container>
+      <span class="todo__title" (dblclick)="edit()">
+        {{ todo.title }}
+      </span>
+
+      <!--Remove button appears only on hover-->
+      <button type="button" class="todo__remove" (click)="delete.emit()">×</button>
+    </ng-container>
+  }
+
+  <!--overlay will cover the todo while it is being deleted or updated-->
+  <div class="modal overlay" [class.is-active]="false">
+    <div class="modal-background has-background-white-ter"></div>
+    <div class="loader"></div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="todoapp">
+  <h1 class="todoapp__title">todos</h1>
+
+  <div class="todoapp__content">
+    <header class="todoapp__header">
+      <!--this button should have `active` class only if all todos are completed-->
+      <button type="button" class="todoapp__toggle-all active" data-cy="ToggleAllButton"></button>
+
+      <!--Add a todo on form submit-->
+      <app-todo-form (save)="addTodo($event)"></app-todo-form>
+    </header>
+
+    <section class="todoapp__main" data-cy="TodoList">
+      <!--This is a completed todo-->
+      @for (todo of visibleTodos$ | async; track todo.id; let i = $index) {
+        <app-todo
+          [todo]="todo"
+          (delete)="deleteTodo(todo)"
+          (rename)="renameTodo(todo, $event)"
+          (toggle)="toggleTodo(todo)"
+        ></app-todo>
+      }
+    </section>
+
+    <!--Hide the footer if there are no todos-->
+    <footer class="todoapp__footer">
+      <span class="todo-count"> {{ activeCount$ | async }} items left </span>
+
+      <app-filter></app-filter>
+
+      <!--this button should be disabled if there are no completed todos-->
+      <button type="button" class="todoapp__clear-completed">Clear completed</button>
+    </footer>
+  </div>
+
+  <app-message></app-message>
+</div>
